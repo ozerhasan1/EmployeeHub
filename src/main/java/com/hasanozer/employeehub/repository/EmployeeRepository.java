@@ -2,6 +2,8 @@ package com.hasanozer.employeehub.repository;
 
 import com.hasanozer.employeehub.entity.Employee;
 import com.hasanozer.employeehub.enums.EmploymentStatus;
+import com.hasanozer.employeehub.repository.projection.DepartmentEmployeeCountProjection;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -18,6 +20,26 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     boolean existsByDepartmentId(Long departmentId);
 
     long countByDepartmentId(Long departmentId);
+
+    long countByEmploymentStatus(EmploymentStatus employmentStatus);
+
+    @Query("""
+            select d.id as departmentId,
+                   d.name as departmentName,
+                   count(e.id) as employeeCount
+            from Department d
+            left join Employee e on e.department = d
+            group by d.id, d.name
+            order by d.name
+            """)
+    List<DepartmentEmployeeCountProjection> countEmployeesByDepartment();
+
+    @EntityGraph(attributePaths = "department")
+    @Query("""
+            select e from Employee e
+            order by e.hireDate desc, e.id desc
+            """)
+    List<Employee> findRecentHires(Pageable pageable);
 
     @EntityGraph(attributePaths = "department")
     @Query("""
