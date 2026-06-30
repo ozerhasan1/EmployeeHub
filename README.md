@@ -67,3 +67,19 @@ APP_SEED_ENABLED
 The local Docker PostgreSQL is exposed on host port `5433` by default to avoid conflicts with a PostgreSQL service already running on Windows port `5432`.
 
 For detailed Windows setup, see [WINDOWS_SETUP.md](WINDOWS_SETUP.md).
+
+## Run Frontend Locally
+
+The frontend lives in `frontend/`.
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend URL:
+
+```text
+http://127.0.0.1:5173
+```
