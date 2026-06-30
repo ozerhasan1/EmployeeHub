@@ -4,29 +4,21 @@ EmployeeHub is a full-stack internal workforce management application for managi
 
 ## 📸 Screenshots
 
+## 📸 Screenshots
+
 ### Dashboard
 
 ![Dashboard](screenshots/dashboard.png)
-
----
 
 ### Employees
 
 ![Employees](screenshots/employees.png)
 
----
-
-### Employee Form
-
-![Employee Form](screenshots/employee-form.png)
-
----
-
 ### Departments
 
 ![Departments](screenshots/departments.png)
 
-### Swagger API
+### Swagger UI
 
 ![Swagger](screenshots/swagger.png)
 
