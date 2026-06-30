@@ -2,6 +2,34 @@
 
 EmployeeHub is a full-stack internal workforce management application for managing employees, departments, and HR dashboard metrics.
 
+## 📸 Screenshots
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+### Employees
+
+![Employees](screenshots/employees.png)
+
+---
+
+### Employee Form
+
+![Employee Form](screenshots/employee-form.png)
+
+---
+
+### Departments
+
+![Departments](screenshots/departments.png)
+
+### Swagger API
+
+![Swagger](screenshots/swagger.png)
+
 ## Business Problem
 
 Small companies often track employee and department information across spreadsheets, email threads, and disconnected tools. EmployeeHub provides a simple internal system where HR staff can manage core workforce records, review department staffing, and monitor high-level employee status metrics from one place.
