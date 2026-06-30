@@ -1,63 +1,202 @@
 # EmployeeHub
 
-Spring Boot backend for the EmployeeHub workforce management application.
+EmployeeHub is a full-stack internal workforce management application for managing employees, departments, and HR dashboard metrics.
 
-## Requirements
+## Business Problem
+
+Small companies often track employee and department information across spreadsheets, email threads, and disconnected tools. EmployeeHub provides a simple internal system where HR staff can manage core workforce records, review department staffing, and monitor high-level employee status metrics from one place.
+
+## Architecture Overview
+
+EmployeeHub uses a conventional layered architecture:
+
+- React frontend calls the backend through REST APIs.
+- Spring Boot controllers expose HTTP endpoints and remain thin.
+- Services contain business rules and transaction boundaries.
+- Repositories handle persistence through Spring Data JPA.
+- DTOs isolate API contracts from JPA entities.
+- PostgreSQL stores employee and department data.
+
+## Technology Stack
+
+Backend:
 
 - Java 21
-- Docker or Docker Desktop
-- Maven is provided by the included Maven Wrapper
+- Spring Boot 3
+- Maven Wrapper
+- Spring Web
+- Spring Data JPA
+- Hibernate
+- Bean Validation
+- Lombok
+- PostgreSQL
+- Springdoc OpenAPI / Swagger
+- JUnit 5 and Mockito
 
-## Run Backend Locally
+Frontend:
 
-```bash
-docker compose up -d
-./mvnw spring-boot:run
-```
+- React
+- TypeScript
+- Vite
+- Axios
+- TailwindCSS
 
-On Windows PowerShell:
+Development:
 
-```powershell
-docker compose up -d
-.\mvnw.cmd spring-boot:run
-```
+- Docker Compose for PostgreSQL
+- Git
 
-Swagger UI:
+## Project Structure
 
 ```text
-http://localhost:8080/swagger-ui/index.html
+.
+├── docker-compose.yml
+├── pom.xml
+├── src/
+│   ├── main/java/com/hasanozer/employeehub/
+│   │   ├── config/
+│   │   ├── controller/
+│   │   ├── dto/
+│   │   ├── entity/
+│   │   ├── enums/
+│   │   ├── exception/
+│   │   ├── mapper/
+│   │   ├── repository/
+│   │   ├── service/
+│   │   └── util/
+│   └── test/java/com/hasanozer/employeehub/
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── styles/
+│   │   └── types/
+│   └── package.json
+└── WINDOWS_SETUP.md
 ```
 
-API base URL:
+## Features
+
+- Employee CRUD
+- Employee termination instead of hard delete
+- Department CRUD
+- Dashboard summary
+- Employee search, pagination, sorting, and filtering
+- Validation and global exception handling
+- Seed data for local development
+- Swagger API documentation
+- Responsive React frontend
+
+## Database Overview
+
+The database contains two core tables:
+
+- `departments`: department name, description, and audit timestamps
+- `employees`: employee profile fields, employment status, hire date, salary, department reference, and audit timestamps
+
+Employees belong to one department. Departments with assigned employees cannot be deleted. Employee statuses are `ACTIVE`, `ON_LEAVE`, and `TERMINATED`.
+
+## REST API Overview
+
+Base URL:
 
 ```text
 http://localhost:8080/api/v1
 ```
 
-## Useful Endpoints
+Main endpoints:
 
 ```text
-GET    /api/v1/departments
-POST   /api/v1/departments
-GET    /api/v1/departments/{id}
-PUT    /api/v1/departments/{id}
-DELETE /api/v1/departments/{id}
+GET    /departments
+POST   /departments
+GET    /departments/{id}
+PUT    /departments/{id}
+DELETE /departments/{id}
 
-GET    /api/v1/employees
-POST   /api/v1/employees
-GET    /api/v1/employees/{id}
-PUT    /api/v1/employees/{id}
-PATCH  /api/v1/employees/{id}/terminate
+GET    /employees
+POST   /employees
+GET    /employees/{id}
+PUT    /employees/{id}
+PATCH  /employees/{id}/terminate
 
-GET    /api/v1/dashboard/summary
+GET    /dashboard/summary
 ```
 
-Employees are terminated through the API instead of hard-deleted.
+## Swagger Documentation
 
-## Configuration
+Start the backend and open:
 
-The application reads local defaults from `src/main/resources/application.yml`.
-Environment variables can override the database connection:
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+OpenAPI JSON is available at:
+
+```text
+http://localhost:8080/api-docs
+```
+
+## Installation
+
+Required tools:
+
+- Java 21
+- Docker Desktop
+- Node.js 20 or newer
+
+Maven does not need to be installed separately because the repository includes Maven Wrapper.
+
+For Windows-specific setup, see [WINDOWS_SETUP.md](WINDOWS_SETUP.md).
+
+## Running Locally
+
+Start PostgreSQL:
+
+```powershell
+docker compose up -d
+```
+
+Run backend:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+Run frontend:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend URL:
+
+```text
+http://127.0.0.1:5173
+```
+
+Backend URL:
+
+```text
+http://localhost:8080
+```
+
+## Docker Setup
+
+Docker Compose starts PostgreSQL 16 Alpine.
+
+Default local database settings:
+
+```text
+Database: employeehub
+Username: employeehub
+Password: employeehub
+Host port: 5433
+Container port: 5432
+```
+
+The Spring datasource can be overridden with environment variables:
 
 ```text
 SPRING_DATASOURCE_URL
@@ -66,28 +205,43 @@ SPRING_DATASOURCE_PASSWORD
 APP_SEED_ENABLED
 ```
 
-The local Docker PostgreSQL is exposed on host port `5433` by default to avoid conflicts with a PostgreSQL service already running on Windows port `5432`.
+## Testing
 
-For detailed Windows setup, see [WINDOWS_SETUP.md](WINDOWS_SETUP.md).
+Backend:
 
-## Run Frontend Locally
+```powershell
+.\mvnw.cmd clean test
+```
 
-The frontend lives in `frontend/`.
+Frontend build:
 
 ```powershell
 cd frontend
 npm install
-npm run dev
-```
-
-Build check:
-
-```powershell
 npm run build
 ```
 
-Frontend URL:
+Useful API checks:
 
-```text
-http://127.0.0.1:5173
+```powershell
+Invoke-RestMethod http://localhost:8080/api/v1/departments
+Invoke-RestMethod http://localhost:8080/api/v1/employees
+Invoke-RestMethod http://localhost:8080/api/v1/dashboard/summary
+Invoke-WebRequest http://localhost:8080/swagger-ui/index.html
 ```
+
+## Known Limitations
+
+- No authentication or authorization.
+- No database migration tool.
+- No CI/CD pipeline.
+- No frontend automated tests.
+- Local development uses Hibernate `ddl-auto=update`.
+
+## Future Improvements
+
+Appropriate Version 2 improvements include authentication, role-based access, database migrations, frontend test coverage, CI checks, audit history, and richer reporting.
+
+## License Recommendation
+
+MIT is recommended for this portfolio project because it is simple, permissive, and familiar to open source reviewers.

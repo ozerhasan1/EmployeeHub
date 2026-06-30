@@ -13,9 +13,9 @@
 
     <groupId>com.hasanozer</groupId>
     <artifactId>employeehub</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>EmployeeHub</name>
-    <description>Internal workforce management backend</description>
+    <description>Internal workforce management application</description>
 
     <properties>
         <java.version>21</java.version>
