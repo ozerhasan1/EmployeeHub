@@ -48,6 +48,8 @@ POST   /api/v1/employees
 GET    /api/v1/employees/{id}
 PUT    /api/v1/employees/{id}
 PATCH  /api/v1/employees/{id}/terminate
+
+GET    /api/v1/dashboard/summary
 ```
 
 Employees are terminated through the API instead of hard-deleted.
@@ -76,6 +78,12 @@ The frontend lives in `frontend/`.
 cd frontend
 npm install
 npm run dev
+```
+
+Build check:
+
+```powershell
+npm run build
 ```
 
 Frontend URL:

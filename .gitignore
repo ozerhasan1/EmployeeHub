@@ -9,4 +9,9 @@ frontend/vite.config.d.ts
 *.iml
 
 .env
+.env.*
+!.env.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
 *.log
